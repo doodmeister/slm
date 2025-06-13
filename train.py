@@ -35,6 +35,25 @@ def train(model, dataloader, optimizer, criterion, device):
         total_loss += loss.item()
     return total_loss / len(dataloader)
 
+def train_model(text, seq_length=100, epochs=1, batch_size=64, lr=0.002, device=None):
+    """Train a character level model and return it along with the vocab and losses."""
+    dataset = TextDataset(text, seq_length=seq_length)
+    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+
+    if device is None:
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model = CharRNN(len(dataset.vocab)).to(device)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    criterion = nn.CrossEntropyLoss()
+
+    losses = []
+    for epoch in range(epochs):
+        loss = train(model, dataloader, optimizer, criterion, device)
+        losses.append(loss)
+        print(f"Epoch {epoch+1}/{epochs} Loss: {loss:.4f}")
+    return model, dataset.vocab, losses
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', default='data.txt')
@@ -47,19 +66,17 @@ def main():
     with open(args.data, 'r') as f:
         text = f.read()
 
-    dataset = TextDataset(text, seq_length=args.seq_length)
-    dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
-
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = CharRNN(len(dataset.vocab)).to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
-    criterion = nn.CrossEntropyLoss()
-
-    for epoch in range(args.epochs):
-        loss = train(model, dataloader, optimizer, criterion, device)
-        print(f"Epoch {epoch+1}/{args.epochs} Loss: {loss:.4f}")
+    model, vocab, _ = train_model(
+        text,
+        seq_length=args.seq_length,
+        epochs=args.epochs,
+        batch_size=args.batch_size,
+        lr=args.lr,
+        device=device,
+    )
     os.makedirs('checkpoints', exist_ok=True)
-    torch.save({'model_state_dict': model.state_dict(), 'vocab': dataset.vocab}, 'checkpoints/model.pth')
+    torch.save({'model_state_dict': model.state_dict(), 'vocab': vocab}, 'checkpoints/model.pth')
 
 if __name__ == '__main__':
     main()
