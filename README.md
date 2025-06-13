@@ -5,11 +5,12 @@ This repository contains a minimal character-level language model built with PyT
 ## Requirements
 - Python 3.8+
 - PyTorch
+- matplotlib (for the optional GUI)
 
 Install dependencies with:
 
 ```bash
-pip install torch
+pip install torch matplotlib
 ```
 
 ## Training
@@ -30,3 +31,12 @@ python generate.py --checkpoint checkpoints/model.pth --start "Once upon a time"
 ```
 
 This prints generated characters to stdout.
+
+## Graphical Interface
+An optional GUI helps run training and visualize progress. Launch it with:
+
+```bash
+python gui.py
+```
+
+Use the *Select Corpus* button to choose a training text file and start training. A plot of the training loss and model statistics will be displayed when training completes.
