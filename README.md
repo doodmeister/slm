@@ -1,2 +1,32 @@
 # slm
-create a small language model
+
+This repository contains a minimal character-level language model built with PyTorch.
+
+## Requirements
+- Python 3.8+
+- PyTorch
+
+Install dependencies with:
+
+```bash
+pip install torch
+```
+
+## Training
+Download a training corpus and run the training script:
+
+```bash
+wget https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt -O data.txt
+python train.py --data data.txt --epochs 1
+```
+
+This will save a model checkpoint to `checkpoints/model.pth`.
+
+## Text Generation
+Generate text using the trained model:
+
+```bash
+python generate.py --checkpoint checkpoints/model.pth --start "Once upon a time"
+```
+
+This prints generated characters to stdout.
