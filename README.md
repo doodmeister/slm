@@ -41,7 +41,11 @@ A production-grade, extensible implementation of character-level language models
 git clone <repository-url>
 cd slm
 
-# Install dependencies (Python 3.8+ required)
+# Install dependencies (Python 3.12+ required)
+# We recommend using uv for faster dependency management:
+# pip install uv
+# uv pip install -e .
+# Alternatively, use pip:
 pip install -e .
 
 # Verify installation

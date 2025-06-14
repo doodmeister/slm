@@ -497,7 +497,7 @@ def load_generator_from_checkpoint(
 
     try:
         # Load checkpoint
-        checkpoint = torch.load(checkpoint_path, map_location="cpu")
+        checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
 
         # Create vocabulary
         if "vocab" in checkpoint:

@@ -706,6 +706,8 @@ class GenerationTab(ttk.Frame):
     def model_load_failed(self, error: str, progress: ProgressDialog):
         """Called when model loading fails."""
         progress.close()
+        logger.error(f"Failed to load model (GUI): {error}")  # Log to logger
+        print(f"ERROR: Failed to load model (GUI): {error}")  # Print to terminal
         self.status_var.set("Failed to load model")
         messagebox.showerror("Error", f"Failed to load model: {error}")
 

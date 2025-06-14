@@ -276,7 +276,7 @@ class CheckpointManager:
             raise CheckpointError(f"Checkpoint not found: {checkpoint_path}")
 
         try:
-            checkpoint = torch.load(checkpoint_path, map_location="cpu")
+            checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
 
             # Validate checkpoint structure
             required_keys = ["model_state_dict", "epoch", "vocab"]

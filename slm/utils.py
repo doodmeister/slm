@@ -107,7 +107,7 @@ def get_model_size_mb(model: torch.nn.Module) -> float:
     return size_mb
 
 
-def validate_text_input(text: str, min_length: int = 1, max_length: int = 10**6) -> str:
+def validate_text_input(text: str, min_length: int = 1, max_length: int = 10**7) -> str:
     """Validate and sanitize text input.
 
     Args:
@@ -239,7 +239,7 @@ def format_duration(seconds: float) -> str:
         return f"{seconds / 3600:.1f}h"
 
 
-def format_bytes(bytes_count: int) -> str:
+def format_bytes(bytes_count: float) -> str:
     """Format bytes to human-readable string.
 
     Args:
