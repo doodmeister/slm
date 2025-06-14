@@ -11,6 +11,8 @@ Install dependencies with:
 
 ```bash
 pip install torch matplotlib
+# optional for subword tokenization
+pip install sentencepiece
 ```
 
 ## Training
@@ -33,6 +35,20 @@ python train.py --data data.txt --epochs 5 --resume checkpoints/epoch_1.pth
 The command above continues training until epoch five starting from the
 state saved in `epoch_1.pth`.
 
+### Subword Tokenization
+Install the optional `sentencepiece` package to enable subword tokenization.
+First train or load a tokenizer and preprocess the text:
+
+```bash
+python preprocess.py --data data.txt --model_prefix spm --vocab_size 8000 --output data.pt
+```
+
+Then train the model on the tokenized dataset:
+
+```bash
+python train.py --tokenized_data data.pt --epochs 1
+```
+
 ## Text Generation
 Generate text using the trained model:
 
@@ -40,7 +56,13 @@ Generate text using the trained model:
 python generate.py --checkpoint checkpoints/model.pth --start "Once upon a time"
 ```
 
-This prints generated characters to stdout.
+To use the subword tokenizer at generation time, pass the tokenizer model:
+
+```bash
+python generate.py --checkpoint checkpoints/model.pth --tokenizer spm.model --start "Once upon a time"
+```
+
+This prints generated text to stdout.
 
 ## Graphical Interface
 An optional GUI helps run training and visualize progress. Launch it with:
