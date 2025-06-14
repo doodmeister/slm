@@ -3,7 +3,7 @@ import os
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
-from model import CharRNN
+from model import CharRNN, CharTransformer
 
 class TextDataset(Dataset):
     def __init__(self, text, seq_length=100):
@@ -35,14 +35,25 @@ def train(model, dataloader, optimizer, criterion, device):
         total_loss += loss.item()
     return total_loss / len(dataloader)
 
-def train_model(text, seq_length=100, epochs=1, batch_size=64, lr=0.002, device=None):
+def train_model(
+    text,
+    seq_length=100,
+    epochs=1,
+    batch_size=64,
+    lr=0.002,
+    device=None,
+    model_type="rnn",
+):
     """Train a character level model and return it along with the vocab and losses."""
     dataset = TextDataset(text, seq_length=seq_length)
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
     if device is None:
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = CharRNN(len(dataset.vocab)).to(device)
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if model_type == "transformer":
+        model = CharTransformer(len(dataset.vocab)).to(device)
+    else:
+        model = CharRNN(len(dataset.vocab)).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = nn.CrossEntropyLoss()
 
@@ -61,6 +72,8 @@ def main():
     parser.add_argument('--epochs', type=int, default=1)
     parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--lr', type=float, default=0.002)
+    parser.add_argument('--model', choices=['rnn', 'transformer'], default='rnn',
+                        help='Model architecture to use')
     args = parser.parse_args()
 
     with open(args.data, 'r') as f:
@@ -74,9 +87,17 @@ def main():
         batch_size=args.batch_size,
         lr=args.lr,
         device=device,
+        model_type=args.model,
     )
     os.makedirs('checkpoints', exist_ok=True)
-    torch.save({'model_state_dict': model.state_dict(), 'vocab': vocab}, 'checkpoints/model.pth')
+    torch.save(
+        {
+            'model_state_dict': model.state_dict(),
+            'vocab': vocab,
+            'model_type': args.model,
+        },
+        'checkpoints/model.pth',
+    )
 
 if __name__ == '__main__':
     main()
