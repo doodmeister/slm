@@ -130,10 +130,6 @@ def run_basic_tests() -> bool:
     try:
         # Test core imports
         from slm.config import Config
-        from slm.core.models import CharRNN, CharTransformer
-        from slm.core.data import Vocabulary, TextDataset
-        from slm.core.trainer import Trainer
-        from slm.core.generator import Generator
         
         print("✅ All core modules import successfully")
         

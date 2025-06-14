@@ -26,7 +26,7 @@ class GreedySampling(SamplingStrategy):
     """Greedy sampling - always pick the most likely token."""
 
     def __call__(self, logits: torch.Tensor) -> int:
-        return torch.argmax(logits, dim=-1).item()
+        return int(torch.argmax(logits, dim=-1).item())
 
 
 class TemperatureSampling(SamplingStrategy):
@@ -40,7 +40,7 @@ class TemperatureSampling(SamplingStrategy):
     def __call__(self, logits: torch.Tensor) -> int:
         scaled_logits = logits / self.temperature
         probs = F.softmax(scaled_logits, dim=-1)
-        return torch.multinomial(probs, 1).item()
+        return int(torch.multinomial(probs, 1).item())
 
 
 class TopKSampling(SamplingStrategy):
@@ -68,7 +68,7 @@ class TopKSampling(SamplingStrategy):
 
         # Sample from filtered distribution
         probs = F.softmax(filtered_logits, dim=-1)
-        return torch.multinomial(probs, 1).item()
+        return int(torch.multinomial(probs, 1).item())
 
 
 class TopPSampling(SamplingStrategy):
@@ -107,8 +107,8 @@ class TopPSampling(SamplingStrategy):
         filtered_probs = filtered_probs / filtered_probs.sum()
 
         # Sample from filtered distribution
-        sampled_index = torch.multinomial(filtered_probs, 1).item()
-        return sorted_indices[sampled_index].item()
+        sampled_index = int(torch.multinomial(filtered_probs, 1).item())
+        return int(sorted_indices[sampled_index].item())
 
 
 class RepetitionPenalty:
@@ -506,7 +506,7 @@ def load_generator_from_checkpoint(
             raise GenerationError("No vocabulary found in checkpoint")
 
         # Load model
-        model = load_model_from_checkpoint(checkpoint_path)
+        model = load_model_from_checkpoint(str(checkpoint_path))
 
         # Use default config if none provided
         if config is None:

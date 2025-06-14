@@ -4,11 +4,10 @@ import pytest
 import torch
 import tempfile
 from pathlib import Path
-from unittest.mock import Mock, patch
 
 from slm.config import (
     Config, ModelConfig, TrainingConfig, GenerationConfig,
-    ModelType, RNNType, SamplingMethod, create_default_config
+    ModelType, SamplingMethod, create_default_config
 )
 from slm.core.models import CharRNN, CharTransformer, create_model
 from slm.core.data import Vocabulary, TextDataset, prepare_data
@@ -442,7 +441,7 @@ class TestExceptions:
     def test_exception_hierarchy(self):
         """Test that all exceptions inherit from SLMException."""
         from slm.exceptions import (
-            SLMException, ModelError, DataError, TrainingError,
+            SLMException, DataError, TrainingError,
             GenerationError, ValidationError
         )
         
@@ -459,7 +458,6 @@ class TestExceptions:
     
     def test_exception_details(self):
         """Test exception with details."""
-        from slm.exceptions import ModelError
         
         exc = ModelError("Main message", "Detailed explanation")
         assert exc.message == "Main message"

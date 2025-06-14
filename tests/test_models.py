@@ -6,7 +6,7 @@ import torch.nn as nn
 
 from slm.config import ModelConfig, ModelType, RNNType
 from slm.core.models import (
-    BaseModel, CharRNN, CharTransformer, PositionalEncoding,
+    CharRNN, CharTransformer, PositionalEncoding,
     MultiHeadAttention, TransformerBlock
 )
 from slm.exceptions import ModelError, ValidationError
