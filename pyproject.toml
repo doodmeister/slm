@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "slm"
+version = "2.0.0"
+description = "Simple Language Models - Production-grade character-level language models"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "SLM Team"}
+]
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "torch>=1.9.0",
+    "matplotlib>=3.3.0",
+    "transformers>=4.0.0",
+    "numpy>=1.21.0",
+    "pydantic>=1.8.0",
+    "click>=7.0",
+    "rich>=10.0.0",
+    "loguru>=0.5.0",
+    "pyyaml>=5.4.0",
+    "tqdm>=4.50.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+    "ruff>=0.1.0",
+    "mypy>=0.900",
+    "pre-commit>=2.0",
+]
+gui = [
+    "tkinter",
+]
+
+[project.scripts]
+slm-train = "slm.cli:train_cli"
+slm-generate = "slm.cli:generate_cli"
+slm-gui = "slm.gui:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["slm*"]
+
+[tool.ruff]
+# Use the ruff.toml file for configuration
+extend = "ruff.toml"
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "--cov=slm --cov-report=html --cov-report=term-missing"
