@@ -10,7 +10,7 @@ This repository contains a minimal character-level language model built with PyT
 Install dependencies with:
 
 ```bash
-pip install torch matplotlib
+pip install -r requirements.txt
 ```
 
 ## Training
