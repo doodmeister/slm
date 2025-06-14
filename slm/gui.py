@@ -634,11 +634,11 @@ class GenerationTab(ttk.Frame):
                     try:
                         from slm.config import GenerationConfig
                         gen_config = GenerationConfig()
-                        
-                        self.generator = load_generator_from_checkpoint(
+                          self.generator = load_generator_from_checkpoint(
                             file_path, gen_config
                         )
-                          self.app.root.after(0, lambda: self.model_loaded(file_path, progress))
+                        
+                        self.app.root.after(0, lambda: self.model_loaded(file_path, progress))
                     except Exception as e:
                         self.app.root.after(0, lambda: self.model_load_failed(str(e), progress))
                 
