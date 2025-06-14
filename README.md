@@ -23,7 +23,17 @@ wget https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakesp
 python train.py --data data.txt --epochs 1
 ```
 
-This will save a model checkpoint to `checkpoints/model.pth`.
+This will save a model checkpoint to `checkpoints/model.pth` as well as
+per-epoch checkpoints in the `checkpoints/` directory.
+
+To resume training from a saved checkpoint:
+
+```bash
+python train.py --data data.txt --epochs 5 --resume checkpoints/epoch_1.pth
+```
+
+The command above continues training until epoch five starting from the
+state saved in `epoch_1.pth`.
 
 ### Subword Tokenization
 Install the optional `sentencepiece` package to enable subword tokenization.
